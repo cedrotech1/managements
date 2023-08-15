@@ -203,7 +203,7 @@
         <?php
           include './connection.php';
           
-          $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity FROM sales,product,customers 
+          $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit FROM sales,product,customers 
           WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id limit 5";
           $result = $conn->query($sql);
 
@@ -237,6 +237,7 @@
                       <th scope="col">quantity</th>
                       <th scope="col">U_price</th>
                       <th scope="col">total price</th>
+                      <th scope="col">Profit</th>
                       
                     </tr>
                   </thead> 
@@ -257,6 +258,7 @@
                               <td><?php echo $row["3"].' in '.$row["unity"];?></td>
                               <td><?php echo $row["4"].'   Rwf';?></td>
                               <td><?php echo $row["total_price"].'   Rwf';?></td>
+                              <td><?php echo $row["profit"].'   Rwf';?></td>
      
                          
                     </tr>
@@ -326,6 +328,8 @@
 <?php
 include './connection.php';
 
+
+
 @$go=$_POST["go"];
 
 @$cid=$_POST["customer"];
@@ -348,64 +352,110 @@ $tp=$quantity*$price;
 
 if(isset($go))
 {
+  $sql = "SELECT * FROM product where p_id=$pid";
+  $result = $conn->query($sql);
+
+    while($row = mysqli_fetch_array($result)) {
+      $qin=$row['details'];
+     $qp=$row['quantity'];
+     $pri=$row['price'];
+     $ttp=$row['total_price'];
+   
+    }
   if($cid!='' || $pid!='' || $unity!=''  || $quantity!='' || $price!='')
   {
 
-    // $sql = "SELECT * FROM product where p_id=$pid";
-    // $result = $conn->query($sql);
-
-    //   while($row = mysqli_fetch_array($result)) {
-    //     echo $qin=$row['details'];
-    //     echo $qp=$row['quantity'];
-    //     echo $ttp=$row['total_price'];
-     
-    //   }
-    //   if($unity=='detaye')
-    //   {
+  
+      if($unity=='detaye')
+      {
        
-    //         if($qin>=$quantity)
-    //         {
-    //           // $cost_det=$ttp/$qin;
-    //           $remain=$qp-$quantity;
-    //           $sql = "update product set details='$qp' where p_id=$pid";
-    //           $result = $conn->query($sql);
+            if($qin>=$quantity)
+            {
+               $cost_det=$ttp/$qin;
+
+               $cost1=$quantity * $cost_det;
+               $p=$tp-$cost1;
+              //  echo $sellp=$tp/$quantity;
+               $remain=$qp-$quantity;
+
+              $sql = "update product set details='$remain' where p_id=$pid";
+              $result = $conn->query($sql);
+
+
+                     $sql = "INSERT INTO `sales` (`id`, `c_id`, `p_id`, `quantity`, `price`, `date`, `time`,
+                       `total_price`, `day`, `month`, `year`,`unity`,`profit`) 
+                      VALUES (NULL,'$cid', '$pid', '$quantity', '$price', '$dates', '$time','$tp','$d','$m','$y','$unity','$p')";
+
+                      // $sql = "INSERT INTO `sales` (`id`, `c_id`, `p_id`, `quantity`, `price`, `date`, `time`) 
+                      // VALUES (NULL, '$cid', '$pid', '$quantity', '$price', '$date', '$time')";
+
+                      if (mysqli_query($conn, $sql)) {
+
+                        echo '<script>alert("sales  added successfull ")</script>';
+                        echo "<script>window.location='./sales.php'</script>";
+
+                      } else {
+                        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                      }
+
+                      mysqli_close($conn);
 
             
 
-    //         }else{
-    //           ?>
-    //           <script>//alert('that quantity is not available')</script>
-    //           <?php
-    //         }
+            }else{
+              ?>
+              <script>alert('that quantity is not available')</script>
+              <?php
+            }
 
-    //   }else{
+      }else{
 
-    //   }
+        if($qp>=$quantity)
+        {
+           //$cost_det=$ttp/$qin;
 
-
-    $sql = "INSERT INTO `sales` (`id`, `c_id`, `p_id`, `quantity`, `price`, `date`, `time`,
-     `total_price`, `day`, `month`, `year`,`unity`) 
-    VALUES (NULL,'$cid', '$pid', '$quantity', '$price', '$dates', '$time','$tp','$d','$m','$y','$unity')";
-
-    // $sql = "INSERT INTO `sales` (`id`, `c_id`, `p_id`, `quantity`, `price`, `date`, `time`) 
-    // VALUES (NULL, '$cid', '$pid', '$quantity', '$price', '$date', '$time')";
-
-    if (mysqli_query($conn, $sql)) {
-
-     
-
-      echo '<script>alert("sales  added successfull ")</script>';
-      echo "<script>window.location='./sales.php'</script>";
+           $cost1=$quantity * $pri;
+           $p=$tp-$cost1;
+          
+           
+          // if($qin)
+           $remain=$qp-$quantity;
+           
+              $new=$remain*$pri;
+          $sql = "update product set quantity='$remain', total_price='$new' where p_id=$pid";
+          $result = $conn->query($sql);
 
 
+                 $sql = "INSERT INTO `sales` (`id`, `c_id`, `p_id`, `quantity`, `price`, `date`, `time`,
+                   `total_price`, `day`, `month`, `year`,`unity`,`profit`) 
+                  VALUES (NULL,'$cid', '$pid', '$quantity', '$price', '$dates', '$time','$tp','$d','$m','$y','$unity','$p')";
+
+                  // $sql = "INSERT INTO `sales` (`id`, `c_id`, `p_id`, `quantity`, `price`, `date`, `time`) 
+                  // VALUES (NULL, '$cid', '$pid', '$quantity', '$price', '$date', '$time')";
+
+                  if (mysqli_query($conn, $sql)) {
+
+                    echo '<script>alert("sales  added successfull ")</script>';
+                    echo "<script>window.location='./sales.php'</script>";
+
+                  } else {
+                    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                  }
+
+                  mysqli_close($conn);
+
+        
+
+        }else{
+          ?>
+          <script>alert('that quantity is not available')</script>
+          <?php
+        }
+
+      }
 
 
-      
-    } else {
-      echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-
-    mysqli_close($conn);
+ 
 
 
 }else{

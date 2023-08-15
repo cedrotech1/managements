@@ -217,9 +217,9 @@ if ($result->num_rows > 0) {
                               <td><?php echo $row["2"];?></td>
                               
                               <td><?php echo $row["3"];?></td>
-                              <td><?php echo $row["4"];?></td>
+                              <td><?php echo $row["4"] .'   Rwf';?></td>
                               <td><?php echo $row["details"];?></td>
-                              <td><?php echo $row["total_price"];?></td>
+                              <td><?php echo $row["total_price"].'   Rwf';?></td>
                              
      
                               <td> <a href="delete_product.php?id=<?php echo $row["0"]  ?>"><button type="button" class="btn btn-outline-danger btn-sm">delete</button> </a></td>

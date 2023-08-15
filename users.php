@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>sales</title>
+  <title>product</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -53,7 +53,7 @@
 
 
               <button type="button" class="btn btn-primary col-4" data-bs-toggle="modal" data-bs-target="#disabledAnimation">
-                ADD MONTH FOR REPORT
+                ADD USERS
               </button>
               <br>
        
@@ -69,40 +69,51 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">MONTH REPORT</h5>
+                      <h5 class="modal-title">ADD USERS FORM</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <form class="row g-3" method='post' action='month_report.php'>
-            
+                    <form class="row g-3" method='post' action='users.php'>
+             
+                    <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" name='name' placeholder="Your Name">
+                    <label for="floatingName"> name</label>
+                  </div>
+                </div>
 
-            
-                
+             
+              
                 <div class="col-md-12">
                   <div class="form-floating">
-                  <div class="col-md-12">
+                    <input type="text" class="form-control" id="floatingName" name='uname' placeholder="ENTER USER NAMES">
+                    <label for="floatingName">User Names</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
                   <div class="form-floating">
-                    <select name="m" id="" class='form-control'>
-
-                        <option value="01">Janually</option>
-                        <option value="02">Febuary</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="08">August</option>
-
-                  </select>
-                  <label for="floatingName">month : </label>
+                    <input type="text" class="form-control" id="floatingName" name='password' placeholder="ENTER USER NAMES">
+                    <label for="floatingName">Password</label>
                   </div>
                 </div>
-                    
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" class="form-control" id="floatingName" name='cpassword' placeholder="ENTER USER NAMES">
+                    <label for="floatingName">Confirm Password</label>
                   </div>
                 </div>
+
+
+
+               
+
                
                
           
                 <div class="text-center">
-                  <button type="submit" name='go' class="btn btn-primary">Submit</button>
+                  <button type="submit" name='go' class="btn btn-primary">ADD</button>
                   <button type="reset" class="btn btn-secondary">Reset</button>
                 </div>
               </form><!-- End floating Labels Form -->
@@ -112,116 +123,95 @@
                 </div>
               </div><!-- End Disabled Animation Modal-->
 
-                 
-
-                  <?php
-                    include './connection.php';
-                      @$m=$_POST['m'];
-                    // $date=Date('d/m/20y');
-                    @$go=$_POST['go'];
-                    if(isset($go)){
-
-                      $sql2 = "SELECT sum(sales.total_price) as total,sum(sales.profit) as profit FROM sales,product,customers 
-                      WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and sales.month='$m'";
-                      $result2 = $conn->query($sql2);
-                      while($datax=mysqli_fetch_array($result2)){
-                        $total=$datax['total'];
-                        $profit=$datax['profit'];
-                      }
+      
 
 
-                      $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit FROM sales,product,customers 
-                      WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and sales.month='$m'";
-                      $result = $conn->query($sql);
+
+
+
+<?php
+
+include './connection.php';
+	
+$sql = "SELECT * FROM users where username!='admin'";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+ $i=0;
+?>
+
+
+
   
-                      if ($result->num_rows > 0) {
-                     ?>
-                      <div class="card-body">
-                    <h5 class="card-title">Month Report <span>| </span></h5>
+                  <div class="card-body">
+                    <h5 class="card-title">All Users <span>| </span></h5>
+  
+                
+
 
                   <table class="table table-striped">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
                      
-                    
-                      <th scope="col">customer</th>
-                      <th scope="col">product</th>
-                    
-                      <th scope="col">quantity</th>
-                      <th scope="col">U_price</th>
-                      <th scope="col">total price</th>
-                      <th scope="col">Profit</th>
                       
+                      <th scope="col">Names</th>
+                      <th scope="col">username </th>
+                   
+                     
+                      <th scope="col"  style="text-align:LEFT">Modify</th>
                     </tr>
                   </thead> 
                   <tbody>
 
-                     <?php
-            
-                   
-	
-                   
-                     $i=0;
+                  <?php
+                  
                       while($row = mysqli_fetch_array($result)) {
                        $i++;
                        ?>
                           <tr>
                           <!-- `id`, `names`, `email`, `subject`, `message` -->
                               <th scope="row"><?php echo $i; ?></th>
-                              
-                              <td><?php echo $row["c_fname"];?></td>
-                             
-                              <td><?php echo $row["2"].'';?></td>
-                              <td><?php echo $row["3"].' in '.$row["unity"];?></td>
-                              <td><?php echo $row["4"].'   Rwf';?></td>
-                              <td><?php echo $row["total_price"].'   Rwf';?></td>
-                              <td><?php echo $row["profit"].'   Rwf';?></td>
+                              <td><?php echo $row["1"];?></td>
+                              <td><?php echo $row["2"];?></td>
+                        
+                            
      
-                         
+                              <td> <a href="delete_user.php?id=<?php echo $row["0"]  ?>"><button type="button" class="btn btn-outline-danger btn-sm">delete</button> </a></td>
+
                     </tr>
                        <?php
                       }
                     } else {
+
                       ?>
                       <div class="card" style='padding:1cm'>
-                        <center> <h4><i>There is no sales at this Month></i></h4></center>
-                        </div>
+                        <center> <h4><i>There is no any users recorded</i></h4></center>
+                      </div>
 
-                      <?php
-
-                      }
-
-                      ?>
-
-
-
-
-                      </tbody>
-                      </table>
-                      <?php
-                    if ($result->num_rows > 0) {
-                      ?>
-                      <h4>Total sales amount : <?php echo $total.'   Rwf'; ?></h4>
-                    <h4>Total profits amount : <?php echo $profit.'   Rwf'; ?></h4>
                       <?php
                     }
+                  ?>
+                 
+               
+              
+               
+                  </tbody>
+                </table>
 
-                    ?>
+  
+                  </div>
+  
+                </div>
+              </div><!-- End Recent Sales -->
+  
+            
 
-                      </div>
+            </div>
+          </div>
 
-                      </div>
-                      </div><!-- End Recent Sales -->
-
-
-
-                      </div>
-                      </div>
-                      <?php
-                      }
-                      ?>
-
+       
     </section>
 
   </main><!-- End #main -->
@@ -254,3 +244,55 @@
 </body>
 
 </html>
+
+<?php
+include './connection.php';
+
+@$go=$_POST["go"];
+
+@$name=$_POST["name"];
+@$uname=$_POST["uname"];
+@$password=$_POST["password"];
+@$cpassword=$_POST["cpassword"];
+
+
+
+
+if(isset($go))
+{
+  if($name!='' || $uname!=''  || $password!='' || $cpassword!='' )
+  {
+
+    if($cpassword===$password)
+    {
+
+
+
+
+      //echo '<script>alert("Welcome to Geeks for Geeks")</script>';
+
+        $sql = "INSERT INTO `users` 
+        VALUES (NULL, '$name', '$uname', '$password');";
+
+        if (mysqli_query($conn, $sql)) {
+
+          echo '<script>alert("user  added successfull ")</script>';
+          echo "<script>window.location='./users.php'</script>";
+          
+        } else {
+          echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
+
+        mysqli_close($conn);
+
+  }else{
+    echo '<script>alert("password missmatch")</script>';
+  }
+
+
+}else{
+  echo '<script>alert("you cant submit empty data")</script>';
+}
+}
+   
+?>

@@ -106,14 +106,15 @@
                     // $date=Date('d/m/20y');
                     @$go=$_POST['go'];
                     if(isset($go)){
-                      $sql2 = "SELECT sum(sales.total_price) as total FROM sales,product,customers 
+                      $sql2 = "SELECT sum(sales.total_price) as total,sum(sales.profit) as profit FROM sales,product,customers 
                       WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and sales.date='$date'";
                       $result2 = $conn->query($sql2);
                       while($datax=mysqli_fetch_array($result2)){
                         $total=$datax['total'];
+                        $profit=$datax['profit'];
                       }
 
-                      $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity FROM sales,product,customers 
+                      $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit FROM sales,product,customers 
                       WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and sales.date='$date'";
                       $result = $conn->query($sql);
   
@@ -134,6 +135,7 @@
                       <th scope="col">quantity</th>
                       <th scope="col">U_price</th>
                       <th scope="col">total price</th>
+                      <th scope="col">profit</th>
                       
                     </tr>
                   </thead> 
@@ -158,6 +160,7 @@
                               <td><?php echo $row["3"].' in '.$row["unity"];?></td>
                               <td><?php echo $row["4"].'   Rwf';?></td>
                               <td><?php echo $row["total_price"].'   Rwf';?></td>
+                              <td><?php echo $row["profit"].'   Rwf';?></td>
      
                          
                     </tr>
@@ -180,7 +183,17 @@
                
                   </tbody>
                 </table>
-                <h4>Total amount : <?php echo $total.'   Rwf'; ?></h4>
+                    <?php
+                    if ($result->num_rows > 0) {
+                      ?>
+                      <h4>Total sales amount : <?php echo $total.'   Rwf'; ?></h4>
+                <h4>Total profits amount : <?php echo $profit.'   Rwf'; ?></h4>
+                      <?php
+                    }
+
+                    ?>
+
+                
 
   
                   </div>

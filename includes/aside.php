@@ -51,6 +51,12 @@
       <span>Month report</span>
     </a>
   </li><!-- End Dashboard Nav -->
+  <li class="nav-item">
+    <a class="nav-link " href="users.php">
+      <i class="bi bi-grid"></i>
+      <span>Users</span>
+    </a>
+  </li><!-- End Dashboard Nav -->
 
   
 
