@@ -206,41 +206,38 @@ body {
    </button></center>
   </form>
 </div>
-
 <?php
-@$go=$_POST["go"];
-echo @$username=$_POST["username"];
-echo @$password=$_POST["password"];
-include 'connection.php';
-if(isset($go))
-{
+if(isset($_POST["go"])) {
+    include 'connection.php';
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    // You should sanitize and escape user inputs to prevent SQL injection
+    $username = mysqli_real_escape_string($conn, $username);
+    $password = mysqli_real_escape_string($conn, $password);
 
 
-    $sql = "SELECT * FROM users where username='admin'";
-    $result = $conn->query($sql);
-    while($data=mysqli_fetch_array($result))
-    {
 
-        $un=$data['username'];
-        $up=$data['password'];
-
+    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $result = mysqli_query($conn, $sql);
+    while($row = mysqli_fetch_array($result)) {
+      $username=$row['username'];
     }
 
-   if($username==$un && $password==$up){
-    echo "<script>window.location='./index.php'</script>";
-   }
 
-    // if ($result->num_rows > 0) 
-    //     {
-             
-                
-    //             echo "<script>window.location='./index.php'</script>";
-    //         }else{
-    //             echo '<script>alert("enter correct cridantios")</script>';
-    //         } 
-        
-      
+    if (mysqli_num_rows($result) === 1) {
 
+        session_start(); // Start a session if not already started
+        $_SESSION['username'] = $username;
+        if($username=='admin'){
+           echo "<script>window.location='./admin/index.php'</script>";
+        }else{
+          echo "<script>window.location='./user/index.php'</script>";
+        }
+       
+        exit(); // After redirecting, exit the script
+    } else {
+        echo '<script>alert("Incorrect password or username")</script>';
+    }
 }
-
 ?>
