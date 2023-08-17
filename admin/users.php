@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>product</title>
+  <title>users</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -133,7 +133,7 @@
 
 include './connection.php';
 	
-$sql = "SELECT * FROM users where username!='admin'";
+$sql = "SELECT * FROM users where role!='admin'";
 
 $result = $conn->query($sql);
 
@@ -272,7 +272,7 @@ if(isset($go))
       //echo '<script>alert("Welcome to Geeks for Geeks")</script>';
 
         $sql = "INSERT INTO `users` 
-        VALUES (NULL, '$name', '$uname', '$password');";
+        VALUES (NULL, '$name', '$uname', '$password', 'user');";
 
         if (mysqli_query($conn, $sql)) {
 

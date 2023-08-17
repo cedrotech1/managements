@@ -114,7 +114,7 @@
                         $profit=$datax['profit'];
                       }
 
-                      $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit FROM sales,product,customers 
+                      $sql = "SELECT customers.name,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit FROM sales,product,customers 
                       WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and sales.date='$date'";
                       $result = $conn->query($sql);
   
@@ -154,13 +154,13 @@
                           <!-- `id`, `names`, `email`, `subject`, `message` -->
                               <th scope="row"><?php echo $i; ?></th>
                               
-                              <td><?php echo $row["c_fname"];?></td>
+                              <td><?php echo $row["0"];?></td>
                              
-                              <td><?php echo $row["2"].'';?></td>
-                              <td><?php echo $row["3"].' in '.$row["unity"];?></td>
-                              <td><?php echo $row["4"].'   Rwf';?></td>
+                              <td><?php echo $row["1"].'';?></td>
+                              <td><?php echo $row["2"].' in '.$row["unity"];?></td>
+                              <td><?php echo $row["3"].'   Rwf';?></td>
                               <td><?php echo $row["total_price"].'   Rwf';?></td>
-                              <td><?php echo $row["profit"].'   Rwf';?></td>
+                              <td><?php echo floor($row["profit"]).'   Rwf';?></td>
      
                          
                     </tr>
@@ -186,8 +186,9 @@
                     <?php
                     if ($result->num_rows > 0) {
                       ?>
-                      <h4>Total sales amount : <?php echo $total.'   Rwf'; ?></h4>
-                <h4>Total profits amount : <?php echo $profit.'   Rwf'; ?></h4>
+                      <br><br>
+                      <p>Total sales amount : <?php echo $total.'   Rwf'; ?></p>
+                <p>Total profits amount : <?php echo floor($profit).'   Rwf'; ?></p>
                       <?php
                     }
 

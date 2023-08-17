@@ -1,3 +1,6 @@
+<?php
+ session_start();
+?>
 <style>
   html {
   height: 100%;
@@ -209,35 +212,51 @@ body {
 <?php
 if(isset($_POST["go"])) {
     include 'connection.php';
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+     $username = $_POST["username"];
+     $password = $_POST["password"];
 
-    // You should sanitize and escape user inputs to prevent SQL injection
-    $username = mysqli_real_escape_string($conn, $username);
-    $password = mysqli_real_escape_string($conn, $password);
+    // // You should sanitize and escape user inputs to prevent SQL injection
+    // $username = mysqli_real_escape_string($conn, $username);
+    // $password = mysqli_real_escape_string($conn, $password);
 
 
 
-    $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+    $sql = "SELECT * FROM users WHERE username='$username'";
     $result = mysqli_query($conn, $sql);
     while($row = mysqli_fetch_array($result)) {
-      $username=$row['username'];
+
+       $username=$row['username'];
+        $passwordx=$row['password'];
+        $id=$row['0'];
+        $role=$row['role'];
     }
 
 
     if (mysqli_num_rows($result) === 1) {
 
-        session_start(); // Start a session if not already started
-        $_SESSION['username'] = $username;
-        if($username=='admin'){
-           echo "<script>window.location='./admin/index.php'</script>";
-        }else{
-          echo "<script>window.location='./user/index.php'</script>";
-        }
-       
-        exit(); // After redirecting, exit the script
+        // Start a session if not already started
+        if($passwordx==$password){
+
+            
+              if($role=='admin'){
+
+                  $_SESSION['user'] = $username;
+                  $_SESSION['id'] = $id;
+                  echo "<script>window.location='./admin/index.php'</script>";
+                  
+              }else{
+                $_SESSION['user'] = $username;
+                $_SESSION['id'] = $id;
+                echo "<script>window.location='./user/index.php'</script>";
+              }
+            
+              exit(); // After redirecting, exit the script
+       }else{
+        echo '<script>alert("Incorrect  password")</script>';
+       }
+        
     } else {
-        echo '<script>alert("Incorrect password or username")</script>';
+        echo '<script>alert("Incorrect  username")</script>';
     }
 }
 ?>

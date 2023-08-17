@@ -1,3 +1,28 @@
+
+
+<?php
+ include './connection.php';
+ @$date=$_POST['day'];
+// $date=Date('d/m/20y');
+@$m=date("m");
+@$go=$_POST['go'];
+  $sql2 = "SELECT sum(sales.total_price) as total,sum(sales.profit) as profit FROM sales,product,customers 
+  WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id";
+  $result2 = $conn->query($sql2);
+  while($datax=mysqli_fetch_array($result2)){
+    $total=$datax['total'];
+    $profit=$datax['profit'];
+  }
+
+
+  $sql2 = "SELECT sum(sales.total_price) as total,sum(sales.profit) as profit FROM sales,product,customers 
+  WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and month='$m'";
+  $result2 = $conn->query($sql2);
+  while($datax=mysqli_fetch_array($result2)){
+    $totalx=$datax['total'];
+    $profitx=$datax['profit'];
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -79,7 +104,7 @@ include './includes/aside.php';
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">SALES <span>| Today</span></h5>
+                  <h5 class="card-title">SALES <span>| </span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -94,7 +119,7 @@ include './includes/aside.php';
                         
                         if ($result) {
                           $row_count = $result->num_rows;
-                          echo $row_count;
+                          echo $row_count .' sales';
                         } else {
                           echo "Query failed: " . $conn->error;
                         }
@@ -128,7 +153,7 @@ include './includes/aside.php';
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">total amount from sales <span>| This Month</span></h5>
+                  <h5 class="card-title">total amount from sales <span>|</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -137,23 +162,51 @@ include './includes/aside.php';
                     <div class="ps-3">
                     <h6>  
                     <?php
-                    include './connection.php';
-	
-                    $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time FROM sales,product,customers 
-                    WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id";
-                    $result = $conn->query($sql);
+                  
+                      echo $total.' Rwf';
+                    
+                  ?>
+                 
+                      </h6>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
 
-                    if ($result->num_rows > 0) {
-                     $i=0;$sum=0;
-                      while($row = mysqli_fetch_array($result)) {
-                       $i++;
-                       $sum=$sum+$row['4'];
-                       
-                      }
-                      echo $sum;
-                    } else {
-                      echo "0 results";
-                    }
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">total profit from sales <span>| </span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                    <h6>  
+                    <?php
+                  
+                      echo floor($profit).' Rwf';
+                    
                   ?>
                  
                       </h6>
@@ -197,7 +250,7 @@ include './includes/aside.php';
                         
                         if ($result) {
                           $row_count = $result->num_rows;
-                          echo $row_count;
+                          echo $row_count .' products';;
                         } else {
                           echo "Query failed: " . $conn->error;
                         }
@@ -211,6 +264,94 @@ include './includes/aside.php';
 
               </div>
             </div><!-- End Revenue Card -->
+
+               <!-- Revenue Card -->
+               <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">total amount from sales <span>| This month</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                    <h6>  
+                    <?php
+              
+                      echo $totalx.' Rwf';
+                    
+                  ?>
+                 
+                      </h6>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+
+
+
+              <!-- Revenue Card -->
+              <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">total profit amount from sales <span>| This month</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                    <h6>  
+                    <?php
+              
+                      echo floor($profitx).' Rwf';
+                    
+                  ?>
+                 
+                      </h6>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
 
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-12">
@@ -244,7 +385,7 @@ include './includes/aside.php';
                         
                         if ($result) {
                           $row_count = $result->num_rows;
-                          echo $row_count;
+                          echo $row_count.' customers';;
                         } else {
                           echo "Query failed: " . $conn->error;
                         }
@@ -287,7 +428,7 @@ include './includes/aside.php';
                         
                         if ($result) {
                           $row_count = $result->num_rows;
-                          echo $row_count;
+                          echo $row_count .' suppliers';;
                         } else {
                           echo "Query failed: " . $conn->error;
                         }

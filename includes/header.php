@@ -1,4 +1,14 @@
 
+
+<?php
+session_start();
+if(!isset($_SESSION['username']));
+{
+  header('location:../login.php');
+}
+
+
+?>
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 

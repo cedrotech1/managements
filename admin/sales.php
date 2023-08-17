@@ -203,8 +203,8 @@
         <?php
           include './connection.php';
           
-          $sql = "SELECT c_fname,c_lname,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit FROM sales,product,customers 
-          WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id limit 5";
+          $sql = "SELECT name,p_name,sales.quantity,sales.price,date,time,sales.total_price,sales.unity,sales.profit,sales.id FROM sales,product,customers 
+          WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id order by sales.id desc ";
           $result = $conn->query($sql);
 
           if ($result->num_rows > 0) {
@@ -252,13 +252,14 @@
                           <!-- `id`, `names`, `email`, `subject`, `message` -->
                               <th scope="row"><?php echo $i; ?></th>
                               
-                              <td><?php echo $row["c_fname"];?></td>
+                              <td><?php echo $row["name"];?></td>
                              
-                              <td><?php echo $row["2"].'';?></td>
-                              <td><?php echo $row["3"].' in '.$row["unity"];?></td>
-                              <td><?php echo $row["4"].'   Rwf';?></td>
+                              <td><?php echo $row["p_name"].'';?></td>
+                              <td><?php echo $row["2"].' in '.$row["unity"];?></td>
+                              <td><?php echo $row["3"].'   Rwf';?></td>
                               <td><?php echo $row["total_price"].'   Rwf';?></td>
                               <td><?php echo $row["profit"].'   Rwf';?></td>
+                              <td> <a href="delete_sales.php?id=<?php echo $row["id"]  ?>"><button type="button" class="btn btn-outline-danger btn-sm">delete</button> </a></td>
      
                          
                     </tr>
@@ -376,7 +377,7 @@ if(isset($go))
                $cost1=$quantity * $cost_det;
                $p=$tp-$cost1;
               //  echo $sellp=$tp/$quantity;
-               $remain=$qp-$quantity;
+               echo $remain=$qin-$quantity;
 
               $sql = "update product set details='$remain' where p_id=$pid";
               $result = $conn->query($sql);

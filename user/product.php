@@ -129,7 +129,7 @@
                       while($row = mysqli_fetch_array($result)) {
                        $i++;
                        ?>
-                         <option value="<?php echo $row['0'] ?>"><?php echo $row['1']. " ".$row['2']; ?></option>
+                         <option value="<?php echo $row['0'] ?>"><?php echo $row['1']; ?></option>
                        <?php
                       }
                     } else {
@@ -187,6 +187,7 @@ if ($result->num_rows > 0) {
                 
 
 
+
                   <table class="table table-striped">
                   <thead>
                     <tr>
@@ -197,8 +198,9 @@ if ($result->num_rows > 0) {
                       <th scope="col">unity </th>
                       <th scope="col">quantity</th>
                       <th scope="col">price</th>
-                      <th scope="col">ava. details</th>
+                      <th scope="col"> details(detaye)</th>
                       <th scope="col">total price</th>
+                      <th scope="col">supplied by</th>
                      
                       <th scope="col"  style="text-align:LEFT">Modify</th>
                     </tr>
@@ -220,6 +222,7 @@ if ($result->num_rows > 0) {
                               <td><?php echo $row["4"] .'   Rwf';?></td>
                               <td><?php echo $row["details"];?></td>
                               <td><?php echo $row["total_price"].'   Rwf';?></td>
+                              <td><?php echo $row["v_name"];?></td>
                              
      
                               <td> <a href="delete_product.php?id=<?php echo $row["0"]  ?>"><button type="button" class="btn btn-outline-danger btn-sm">delete</button> </a></td>

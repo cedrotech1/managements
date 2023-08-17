@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +7,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>sales</title>
+  <title>change password</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -52,8 +54,12 @@
         
 
 
-              <button type="button" class="btn btn-primary col-4" data-bs-toggle="modal" data-bs-target="#disabledAnimation">
-                ADD DAY FOR REPORT
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary col-4" data-bs-toggle="modal" data-bs-target="#disabledAnimation">
+                CLICK HERE TO CHANGE PASSWORD
+              </button>
+&nbsp;
+&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-primary col-4" data-bs-toggle="modal" data-bs-target="#Animation">
+                CLICK HERE TO CHANGE USERNAME
               </button>
               <br>
        
@@ -69,26 +75,93 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">DAY REPORT</h5>
+                      <h5 class="modal-title"> <center>EDIT PASSWORD FORM</center></h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                    <form class="row g-3" method='post' action='day_report.php'>
+                    <form class="row g-3" method='post' action='change.php'>
             
 
             
                 
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="date"  class="form-control" id="floatingName" name='day' placeholder="Your Name">
-                    <label for="floatingName">day report</label>
+                    <input type="password"  class="form-control" id="floatingName" name='cp' placeholder="Your Name">
+                    <label for="floatingName">Current password</label>
                   </div>
                 </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="password"  class="form-control" id="floatingName" name='np' placeholder="Your Name">
+                    <label for="floatingName">new password</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="password"  class="form-control" id="floatingName" name='cop' placeholder="Your Name">
+                    <label for="floatingName">comfirm password</label>
+                  </div>
+                </div>
+               
+               
                
                
           
                 <div class="text-center">
                   <button type="submit" name='go' class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-secondary">Reset</button>
+                </div>
+              </form><!-- End floating Labels Form -->
+                    </div>
+                  
+                  </div>
+                </div>
+              </div><!-- End Disabled Animation Modal-->
+
+
+
+
+
+                    
+              <div class="modal" id="Animation" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title"> <center>EDIT USERNAME FORM</center></h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <form class="row g-3" method='post' action='change.php'>
+            
+
+            
+                
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="password"  class="form-control" id="floatingName" name='cp' placeholder="Your Name">
+                    <label for="floatingName">your password</label>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text"  class="form-control" id="floatingName" name='un' placeholder="Your Name">
+                    <label for="floatingName">new username</label>
+                  </div>
+                </div>
+
+                
+
+               
+               
+               
+               
+               
+          
+                <div class="text-center">
+                  <button type="submit" name='gox' class="btn btn-primary">Submit</button>
                   <button type="reset" class="btn btn-secondary">Reset</button>
                 </div>
               </form><!-- End floating Labels Form -->
@@ -104,7 +177,7 @@
                     include './connection.php';
                      @$date=$_POST['day'];
                     // $date=Date('d/m/20y');
-                    @$go=$_POST['go'];
+                    @$go=$_POST['gov'];
                     if(isset($go)){
                       $sql2 = "SELECT sum(sales.total_price) as total,sum(sales.profit) as profit FROM sales,product,customers 
                       WHERE product.p_id=sales.p_id AND customers.customer_id=sales.c_id and sales.date='$date'";
@@ -243,3 +316,74 @@
 </body>
 
 </html>
+
+<?php
+                    include './connection.php';
+                     @$cp=$_POST['cp'];
+                     @$np=$_POST['np'];
+                     @$cop=$_POST['cop'];
+                     @$un=$_POST['un'];
+                    // $date=Date('d/m/20y');
+                    @$go=$_POST['go'];
+                    @$gox=$_POST['gox'];
+                    if(isset($go)){
+
+                        $id=$_SESSION['id'];
+
+
+
+                            $sql = "SELECT * from users where where id='$id'";
+                          $result = $conn->query($sql);
+                          while($row = mysqli_fetch_array($result))
+                            {
+                            @$pass=$row['password'];
+                          }  
+                          if($pass==$cp){
+                             
+                                $s = "update users set password='$np' where id='$id'";
+                                $result = mysqli_query($conn, $s);
+                                if($result)
+                                {
+                                  echo '<script>alert("password changed successfull")</script>';
+                                }
+
+                            
+
+                          }else{
+                            echo '<script>alert("password miss match")</script>';
+                          }
+          }
+
+
+
+          if(isset($gox)){
+
+            echo $id=$_SESSION['id'];
+
+
+
+                 $sql = "SELECT * from users where id='$id'";
+               $result = $conn->query($sql);
+               while($row = mysqli_fetch_array($result))
+                 {
+                 @$pass=$row['password'];
+               }  
+               if($pass==$cp){
+                   if($np==$cop)
+                   {
+                     $s = "update users set username='$un' where id='$id'";
+                     $result = mysqli_query($conn, $s);
+                     if($result)
+                     {
+                       echo '<script>alert("username changed successfull")</script>';
+                     }
+
+                   }else{
+                     echo '<script>alert("re enter password")</script>';
+                   }
+
+               }else{
+                 echo '<script>alert("password miss match")</script>';
+               }
+}
+                    ?>

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>venders</title>
+  <title>suppliers</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -53,7 +53,7 @@
 
 
               <button type="button" class="btn btn-primary col-4" data-bs-toggle="modal" data-bs-target="#disabledAnimation">
-                ADD VENDER
+                ADD SUPPLIERS
               </button>
               <br>
        
@@ -69,40 +69,19 @@
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">ADD VENDER FORM</h5>
+                      <h5 class="modal-title">ADD SUPPLIERS</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                     <form class="row g-3" method='post' action='venders.php'>
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" name='fname' placeholder="Your Name">
-                    <label for="floatingName">First name</label>
+                    <input type="text" class="form-control" id="floatingName" name='name' placeholder="Your Name">
+                    <label for="floatingName">Names</label>
                   </div>
                 </div>
 
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" name='lname' placeholder="Your Name">
-                    <label for="floatingName">Last Name</label>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" name='addres' placeholder="Your Name">
-                    <label for="floatingName">Address</label>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <select type="text" class="form-control" id="floatingName" name='gender' placeholder="Your Name">
-                      <option value="male">male</option>
-                      <option value="female">female</option>
-                    </select>
-                    <label for="floatingName">Gender</label>
-                  </div>
-                </div>
+            
 
                 <div class="col-md-12">
                   <div class="form-floating">
@@ -127,7 +106,15 @@
 
 
 
+              <?php
+                include './connection.php';
+                
+                $sql = "SELECT * FROM venders";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                  $i=0;
 
+              ?>
 
 
 
@@ -135,7 +122,7 @@
 
   
                   <div class="card-body">
-                    <h5 class="card-title">venders <span>| </span></h5>
+                    <h5 class="card-title">SUPPLIERS <span>| </span></h5>
   
                 
 
@@ -146,10 +133,8 @@
                       <th scope="col">#</th>
                      
                       
-                      <th scope="col">First name</th>
-                      <th scope="col">last name</th>
-                      <th scope="col">gender</th>
-                      <th scope="col">addres</th>
+                      <th scope="col">Names/company name</th>
+
                       <th scope="col">phone</th>
                       <th scope="col"  style="text-align:LEFT">Modify</th>
                     </tr>
@@ -157,24 +142,17 @@
                   <tbody>
 
                   <?php
-                    include './connection.php';
-	
-                    $sql = "SELECT * FROM venders";
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
-                     $i=0;
+                  
+                   
                       while($row = mysqli_fetch_array($result)) {
                        $i++;
                        ?>
                           <tr>
                           <!-- `id`, `names`, `email`, `subject`, `message` -->
                               <th scope="row"><?php echo $i; ?></th>
-                              <td><?php echo $row["1"];?></td>
-                              <td><?php echo $row["2"];?></td>
-                              <td><?php echo $row["5"];?></td>
-                              <td><?php echo $row["3"];?></td>
-                              <td><?php echo $row["4"];?></td>
+                              <td><?php echo $row["v_name"];?></td>
+                        
+                              <td><?php echo $row["v_phone"];?></td>
      
                               <td> <a href="delete_vender.php?id=<?php echo $row["0"]  ?>"><button type="button" class="btn btn-outline-danger btn-sm">delete</button> </a></td>
 
@@ -182,7 +160,12 @@
                        <?php
                       }
                     } else {
-                      echo "0 results";
+                      ?>
+                      <div class="card" style='padding:1cm'>
+                        <center> <h4><i>There is no suppliers recorded</i></h4></center>
+                      </div>
+
+                      <?php
                     }
                   ?>
                  
@@ -242,10 +225,7 @@ include './connection.php';
 
 @$go=$_POST["go"];
 
-@$fname=$_POST["fname"];
-@$lname=$_POST["lname"];
-@$gender=$_POST["gender"];
-@$addres=$_POST["addres"];
+@$name=$_POST["name"];
 @$phone=$_POST["phone"];
 
 // @$email=$_POST["email"];
@@ -255,21 +235,21 @@ include './connection.php';
 
 if(isset($go))
 {
-  if($fname!='' || $lname!=''  || $addres!='' || $phone!='')
+  if($name!=''  || $phone!='')
   {
 
 
 
   //echo '<script>alert("Welcome to Geeks for Geeks")</script>';
 
-    $sql = "INSERT INTO `venders` (`v_id`, `v_fname`, `v_lname`, `v_phone`, `v_gender`, `addres`)
-     VALUES (NULL, '$fname', '$lname', '$phone', '$gender', '$addres');";
+    $sql = "INSERT INTO `venders` 
+     VALUES (NULL, '$name', '$phone');";
 
     if (mysqli_query($conn, $sql)) {
 
      
 
-      echo '<script>alert("vender  added successfull ")</script>';
+      echo '<script>alert("supplier  added successfull ")</script>';
 
 
 

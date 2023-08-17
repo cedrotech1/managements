@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$db_name="cms";
+$db_name="omega";
 
 
 // $servername = "localhost";
